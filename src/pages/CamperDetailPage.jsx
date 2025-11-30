@@ -1,56 +1,66 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCamperById } from '../store/campersSlice';
-import Gallery from '../components/Gallery';
-import Reviews from '../components/Reviews';
-import ReservationForm from '../components/ReservationForm';
-import LoadingSpinner from '../components/LoadingSpinner';
+// src/pages/CamperDetailPage.jsx
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCamperById } from "../store/campersSlice";
 
-export default function CamperDetailPage(){
+export default function CamperDetailPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { currentDetail, status } = useSelector(s => s.campers);
+  const { selectedCamper, loading, error } = useSelector(
+    (state) => state.campers
+  );
 
   useEffect(() => {
-    dispatch(fetchCamperById(id));
+    if (id) {
+      dispatch(fetchCamperById(id));
+    }
   }, [dispatch, id]);
 
-  if (status === 'loading' || !currentDetail) return <LoadingSpinner />;
+  if (loading && !selectedCamper) {
+    return <p style={{ padding: 40 }}>Loading...</p>;
+  }
 
-  const c = currentDetail;
+  if (error) {
+    return (
+      <p style={{ padding: 40, color: "red" }}>
+        Error: {String(error)}
+      </p>
+    );
+  }
+
+  if (!selectedCamper) {
+    return <p style={{ padding: 40 }}>Camper not found.</p>;
+  }
+
+  const camper = selectedCamper;
 
   return (
-    <main style={{ padding: 16 }} className="container">
-      <h2>{c.title}</h2>
-      <p>{c.location}</p>
-      <div style={{ display: 'flex', gap: 16, marginTop:12 }}>
-        <div style={{ flex: 2 }}>
-          <Gallery images={c.images || []} />
-          <section>
-            <h3>Features</h3>
-            <ul>
-              {c.features && c.features.map(f => <li key={f}>{f}</li>)}
-            </ul>
-          </section>
+    <main style={{ padding: "40px", maxWidth: "900px", margin: "0 auto" }}>
+      <h1>{camper.name}</h1>
+      <p style={{ color: "#555" }}>{camper.location}</p>
+      <p style={{ fontWeight: 600 }}>
+        €{" "}
+        {typeof camper.price === "number"
+          ? camper.price.toFixed(2)
+          : camper.price}
+      </p>
 
-          <section>
-            <h3>Details</h3>
-            <dl>
-              <dt>Body</dt><dd>{c.bodyType}</dd>
-              <dt>Length</dt><dd>{c.length}</dd>
-              <dt>Width</dt><dd>{c.width}</dd>
-              <dt>Height</dt><dd>{c.height}</dd>
-            </dl>
-          </section>
+      <p style={{ marginTop: 16 }}>{camper.description}</p>
 
-          <Reviews camperId={id} />
-        </div>
-
-        <aside style={{ flex: 1 }}>
-          <ReservationForm camper={c} />
-        </aside>
-      </div>
+      <section style={{ marginTop: 24 }}>
+        <h3>Details</h3>
+        <ul>
+          <li>Form: {camper.form}</li>
+          <li>Length: {camper.length}</li>
+          <li>Width: {camper.width}</li>
+          <li>Height: {camper.height}</li>
+          <li>Tank: {camper.tank}</li>
+          <li>Consumption: {camper.consumption}</li>
+          <li>Transmission: {camper.transmission}</li>
+          <li>Engine: {camper.engine}</li>
+        </ul>
+      </section>
     </main>
   );
 }

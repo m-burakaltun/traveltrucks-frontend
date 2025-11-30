@@ -1,43 +1,83 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLocation, setVehicleType, toggleFeature, clearFilters } from '../store/filtersSlice';
+// src/components/FiltersPanel.jsx
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setLocation,
+  setForm,
+  toggleEquipment,
+  resetFilters,
+} from "../store/filtersSlice";
+import styles from "./FiltersPanel.module.css";
 
-const FEATURES = ['airCondition', 'kitchen', 'shower', 'tv', 'fridge', 'microwave'];
-const TYPES = ['van', 'motorhome', 'campervan'];
-
-export default function FiltersPanel(){
+export default function FiltersPanel() {
   const dispatch = useDispatch();
-  const filters = useSelector(s => s.filters);
+  const { location, form, equipment } = useSelector((s) => s.filters);
+
+  const onLocationChange = (e) => dispatch(setLocation(e.target.value));
+  const onFormChange = (e) => dispatch(setForm(e.target.value));
+  const onEquipmentChange = (val) => dispatch(toggleEquipment(val));
+  const onReset = () => dispatch(resetFilters());
+
+  const isChecked = (val) => equipment.includes(val);
 
   return (
-    <div className="filters-panel">
-      <h3>Filters</h3>
-      <label>
-        Location
-        <input value={filters.location} onChange={e => dispatch(setLocation(e.target.value))} />
-      </label>
+    <aside className={styles.panel}>
+      <h3 className={styles.title}>Filters</h3>
 
-      <div>
-        <p>Vehicle Type</p>
-        {TYPES.map(t => (
-          <label key={t} style={{display:'block'}}>
-            <input type="radio" name="type" checked={filters.vehicleType === t} onChange={() => dispatch(setVehicleType(t))} /> {t}
-          </label>
-        ))}
+      <div className={styles.group}>
+        <label className={styles.label}>Location</label>
+        <input
+          value={location}
+          onChange={onLocationChange}
+          placeholder="Enter location"
+          className={styles.input}
+        />
       </div>
 
-      <div>
-        <p>Extra features</p>
-        {FEATURES.map(f => (
-          <label key={f} style={{display:'block'}}>
-            <input type="checkbox" checked={filters.features.includes(f)} onChange={() => dispatch(toggleFeature(f))} /> {f}
-          </label>
-        ))}
+      <div className={styles.group}>
+        <label className={styles.label}>Vehicle type</label>
+        <select value={form} onChange={onFormChange} className={styles.select}>
+          <option value="">All</option>
+          <option value="panelTruck">Panel Truck</option>
+          <option value="fullyIntegrated">Fully Integrated</option>
+          <option value="alcove">Alcove</option>
+        </select>
       </div>
 
-      <div style={{ marginTop: 8 }}>
-        <button className="btn" onClick={() => dispatch(clearFilters())}>Clear</button>
+      <div className={styles.group}>
+        <label className={styles.label}>Equipment</label>
+
+        <label className={styles.checkboxRow}>
+          <input
+            type="checkbox"
+            checked={isChecked("ac")}
+            onChange={() => onEquipmentChange("ac")}
+          />
+          <span>AC</span>
+        </label>
+
+        <label className={styles.checkboxRow}>
+          <input
+            type="checkbox"
+            checked={isChecked("kitchen")}
+            onChange={() => onEquipmentChange("kitchen")}
+          />
+          <span>Kitchen</span>
+        </label>
+
+        <label className={styles.checkboxRow}>
+          <input
+            type="checkbox"
+            checked={isChecked("tv")}
+            onChange={() => onEquipmentChange("tv")}
+          />
+          <span>TV</span>
+        </label>
       </div>
-    </div>
+
+      <button className={styles.resetBtn} onClick={onReset}>
+        Reset filters
+      </button>
+    </aside>
   );
 }

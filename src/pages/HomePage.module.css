@@ -1,0 +1,158 @@
+/* Ana alan */
+.main {
+    width: 100%;
+    background-color: #ffffff;
+    overflow-x: hidden;
+  }
+  
+  /* Section Başlıkları */
+  .section {
+    padding: 80px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 42px;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .text {
+    font-size: 18px;
+    max-width: 700px;
+    margin: 0 auto 50px auto;
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  /* Özellik Kartları */
+  .features {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  
+  .featureCard {
+    background: #f8f8f8;
+    border-radius: 16px;
+    padding: 28px 22px;
+    width: 310px;
+    text-align: center;
+    transition: all 0.25s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  }
+  
+  .featureCard:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.14);
+  }
+  
+  .featureCard h4 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: #222;
+  }
+  
+  .featureCard p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+  }
+  
+  /* "Discover More" butonu */
+  .secondaryBtn {
+    margin-top: 40px;
+    padding: 14px 36px;
+    background: transparent;
+    border: 2px solid #e44848;
+    border-radius: 10px;
+    color: #e44848;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-weight: 600;
+  }
+  
+  .secondaryBtn:hover {
+    background: #e44848;
+    color: #fff;
+    transform: translateY(-3px);
+  }
+  
+  /* CTA Section */
+  .ctaSection {
+    background-size: cover;
+    background-position: center;
+    padding: 130px 20px;
+    margin-top: 80px;
+    
+  }
+  
+  .ctaSection::before {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+  }
+  
+  .ctaContent {
+    position: relative;
+    z-index: 2;
+    max-width: 780px;
+    margin: 0 auto;
+    text-align: center;
+    color: white;
+  }
+  
+  .ctaContent h2 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    font-weight: 800;
+    text-shadow: 0 3px 12px rgba(0,0,0,0.35);
+  }
+  
+  .ctaContent p {
+    font-size: 20px;
+    max-width: 700px;
+    margin: 0 auto 30px auto;
+    line-height: 1.6;
+    color: #eee;
+  }
+  
+  /* CTA Button */
+  .ctaBtn {
+    padding: 16px 42px;
+    font-size: 20px;
+    border: none;
+    border-radius: 12px;
+    background: #e44848;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s ease;
+  }
+  
+  .ctaBtn:hover {
+    background: #c93636;
+    transform: translateY(-3px);
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .title {
+      font-size: 32px;
+    }
+    .ctaContent h2 {
+      font-size: 34px;
+    }
+    .ctaContent p {
+      font-size: 17px;
+    }
+  }
+  

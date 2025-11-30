@@ -1,0 +1,30 @@
+/* src/components/ReservationForm.module.css */
+.section {
+    margin-top: 20px;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .form input,
+  .form textarea {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+  }
+  
+  .form button {
+    align-self: flex-start;
+    padding: 8px 20px;
+    border-radius: 10px;
+    border: none;
+    background: #e44848;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  

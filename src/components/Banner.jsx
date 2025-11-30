@@ -1,16 +1,23 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/components/Banner.jsx
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./Banner.module.css";
 
 export default function Banner() {
   const navigate = useNavigate();
+  const goCatalog = () => navigate("/catalog");
+
   return (
-    <section className="banner">
-      <div className="container banner-inner">
-        <div style={{maxWidth:700}}>
-          <h1>TravelTrucks ile özgürlüğe çıkın</h1>
-          <p>En iyi karavanlar, anında rezervasyon.</p>
-          <button className="cta" onClick={() => navigate('/catalog')}>View Now</button>
-        </div>
+    <section className={styles.banner}>
+      <div className={styles.overlay} />
+      <div className={styles.content}>
+        <h1 className={styles.title}>Freedom on Wheels</h1>
+        <p className={styles.subtitle}>
+          Konforlu karavanlarımızla Avrupa&apos;nın dört bir yanını keşfet.
+        </p>
+        <button className={styles.cta} onClick={goCatalog}>
+          View Now
+        </button>
       </div>
     </section>
   );

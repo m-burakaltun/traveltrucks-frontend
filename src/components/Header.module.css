@@ -1,0 +1,35 @@
+/* src/components/Header.module.css */
+.header {
+    height: 60px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  
+  .logo {
+    font-weight: 800;
+    font-size: 20px;
+  }
+  
+  .nav {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .link {
+    text-decoration: none;
+    color: #444;
+    font-weight: 500;
+  }
+  
+  .link:hover {
+    color: #e44848;
+  }
+  
+  .active {
+    color: #e44848;
+  }
+  

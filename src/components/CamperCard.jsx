@@ -1,33 +1,72 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addFavorite, removeFavorite } from '../store/favoritesSlice';
+// src/components/CamperCard.jsx
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleFavorite } from "../store/favoritesSlice";
+import { useNavigate } from "react-router-dom";
+import styles from "./CamperCard.module.css";
 
-export default function CamperCard({ camper }){
+export default function CamperCard({ camper }) {
   const dispatch = useDispatch();
-  const favorites = useSelector(s => s.favorites.items);
-  const isFav = !!favorites.find(x => x.id === camper.id);
+  const navigate = useNavigate();
+  const favorites = useSelector((s) => s.favorites.items);
 
-  const toggleFav = () => {
-    if (isFav) dispatch(removeFavorite(camper.id));
-    else dispatch(addFavorite(camper));
+  const {
+    id,
+    name,
+    price,
+    location,
+    rating,
+    description,
+    gallery,
+    images,
+  } = camper;
+
+  const isFav = favorites.includes(id);
+  const displayPrice =
+    typeof price === "number" ? price.toFixed(2) : `${price ?? ""}`;
+
+  const img = gallery?.[0] || images?.[0];
+
+  const onFavorite = () => dispatch(toggleFavorite(id));
+
+  const onShowMore = () => {
+    window.open(`/catalog/${id}`, "_blank", "noopener,noreferrer");
   };
 
-  const priceFormatted = Number(camper.price || 0).toFixed(2);
-
   return (
-    <article className="card">
-      <img src={(camper.images && camper.images[0]) || 'https://via.placeholder.com/600x400?text=No+Image'} alt={camper.title || 'Camper'} />
-      <div className="card-body">
-        <div>
-          <h4>{camper.title}</h4>
-          <p style={{margin:4}}>{camper.location}</p>
-          <p style={{margin:4}}><strong>{priceFormatted} ₺ / day</strong></p>
+    <article className={styles.card}>
+      <div className={styles.thumb}>
+        {img ? <img src={img} alt={name} /> : <div className={styles.placeholder} />}
+      </div>
+
+      <div className={styles.body}>
+        <div className={styles.header}>
+          <h3 className={styles.title}>{name}</h3>
+          <span className={styles.price}>€ {displayPrice}</span>
         </div>
-        <div className="card-actions">
-          <a href={`/catalog/${camper.id}`} target="_blank" rel="noopener noreferrer" className="btn-link">Show More</a>
-          <button onClick={toggleFav} className="icon-btn" aria-label="favorite">{isFav ? '★' : '☆'}</button>
+
+        <div className={styles.meta}>
+          <span>⭐ {rating ?? 0}</span>
+          <span>📍 {location}</span>
+        </div>
+
+        <p className={styles.desc}>
+          {description?.slice(0, 100) ?? ""}...
+        </p>
+
+        <div className={styles.footer}>
+          <button className={styles.moreBtn} onClick={onShowMore}>
+            Show more
+          </button>
+          <button
+            className={`${styles.favBtn} ${isFav ? styles.favActive : ""}`}
+            onClick={onFavorite}
+          >
+            {isFav ? "♥" : "♡"}
+          </button>
         </div>
       </div>
     </article>
   );
 }
+

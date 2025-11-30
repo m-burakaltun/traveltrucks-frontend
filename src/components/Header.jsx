@@ -1,15 +1,30 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+// src/components/Header.jsx
+import React from "react";
+import { NavLink } from "react-router-dom";
+import styles from "./Header.module.css";
 
-export default function Header(){
+export default function Header() {
   return (
-    <header className="header">
-      <div className="container">
-        <Link to="/" style={{fontWeight:700,fontSize:18}}>TravelTrucks</Link>
-        <nav>
-          <Link to="/catalog">Catalog</Link>
-        </nav>
-      </div>
+    <header className={styles.header}>
+      <div className={styles.logo}>TravelTrucks</div>
+      <nav className={styles.nav}>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive ? `${styles.link} ${styles.active}` : styles.link
+          }
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to="/catalog"
+          className={({ isActive }) =>
+            isActive ? `${styles.link} ${styles.active}` : styles.link
+          }
+        >
+          Catalog
+        </NavLink>
+      </nav>
     </header>
   );
 }

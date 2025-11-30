@@ -1,33 +1,60 @@
-import React, { useState } from 'react';
+// src/components/ReservationForm.jsx
+import React, { useState } from "react";
+import styles from "./ReservationForm.module.css";
 
-export default function ReservationForm({ camper }){
-  const [form, setForm] = useState({ name: '', email: '', from: '', to: '', guests: 1 });
-  const [status, setStatus] = useState(null);
+export default function ReservationForm({ camperName }) {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    date: "",
+    comment: "",
+  });
 
-  const submit = (e) => {
+  const onChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  const onSubmit = (e) => {
     e.preventDefault();
-    setStatus('loading');
-    setTimeout(() => {
-      setStatus('success');
-      alert('Reservation successful!');
-      setForm({ name: '', email: '', from: '', to: '', guests: 1 });
-      setStatus(null);
-    }, 800);
+    // burada normalde backend isteği atılır
+    window.alert("Reservation sent successfully!");
+    setForm({ name: "", email: "", date: "", comment: "" });
   };
 
   return (
-    <div className="reservation">
-      <h3>Reserve {camper.title}</h3>
-      <p>Price per day: {Number(camper.price || 0).toFixed(2)} ₺</p>
-      <form onSubmit={submit}>
-        <input required placeholder="Full name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} />
-        <input required type="email" placeholder="Email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} style={{marginTop:6}}/>
-        <label style={{display:'block',marginTop:6}}>From <input required type="date" value={form.from} onChange={e=>setForm({...form,from:e.target.value})} /></label>
-        <label style={{display:'block',marginTop:6}}>To <input required type="date" value={form.to} onChange={e=>setForm({...form,to:e.target.value})} /></label>
-        <input type="number" min={1} value={form.guests} onChange={e=>setForm({...form,guests:Number(e.target.value)})} style={{marginTop:6}}/>
-        <button className="btn" type="submit" style={{marginTop:8}}>Book Now</button>
+    <section className={styles.section}>
+      <h3>Reservation</h3>
+      <form className={styles.form} onSubmit={onSubmit}>
+        <input
+          name="name"
+          value={form.name}
+          onChange={onChange}
+          placeholder="Your name"
+          required
+        />
+        <input
+          name="email"
+          value={form.email}
+          onChange={onChange}
+          placeholder="Email"
+          type="email"
+          required
+        />
+        <input
+          name="date"
+          type="date"
+          value={form.date}
+          onChange={onChange}
+          required
+        />
+        <textarea
+          name="comment"
+          value={form.comment}
+          onChange={onChange}
+          placeholder={`Message about booking ${camperName || "camper"}`}
+          rows={3}
+        />
+        <button type="submit">Send</button>
       </form>
-      {status === 'loading' && <p>Processing...</p>}
-    </div>
+    </section>
   );
 }

@@ -1,87 +1,90 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import API from '../api/api';
+// src/store/campersSlice.js
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchCampersApi, fetchCamperByIdApi } from "../api/api";
 
-// fetch campers (supports backend-side filtering via params)
+// Liste (filtre + sayfalama)
 export const fetchCampers = createAsyncThunk(
-  'campers/fetchCampers',
-  async ({ page = 1, limit = 6, filters = {} }, { rejectWithValue }) => {
+  "campers/fetchCampers",
+  async (filters, thunkAPI) => {
     try {
-      const params = { page, limit };
-      if (filters.location) params.location = filters.location;
-      if (filters.vehicleType) params.vehicleType = filters.vehicleType;
-      if (filters.features && filters.features.length) {
-        // map features to hasX keys expected by backend
-        filters.features.forEach((f) => {
-          const key = `has${f.charAt(0).toUpperCase() + f.slice(1)}`;
-          params[key] = true;
-        });
-      }
-      const res = await API.get('/campers', { params });
-      return { data: res.data, page };
+      return await fetchCampersApi(filters || {});
     } catch (err) {
-      return rejectWithValue(err.response?.data || err.message);
+      return thunkAPI.rejectWithValue(err.message || "Failed to fetch campers");
     }
   }
 );
 
+// Detay
 export const fetchCamperById = createAsyncThunk(
-  'campers/fetchById',
-  async (id, { rejectWithValue }) => {
+  "campers/fetchCamperById",
+  async (id, thunkAPI) => {
     try {
-      const res = await API.get(`/campers/${id}`);
-      return res.data;
+      return await fetchCamperByIdApi(id);
     } catch (err) {
-      return rejectWithValue(err.response?.data || err.message);
+      return thunkAPI.rejectWithValue(err.message || "Failed to fetch camper");
     }
   }
 );
+
+const initialState = {
+  items: [],
+  total: 0,
+  page: 1,
+  selectedCamper: null,
+  loading: false,
+  error: null,
+};
 
 const campersSlice = createSlice({
-  name: 'campers',
-  initialState: {
-    items: [],
-    page: 1,
-    limit: 6,
-    status: 'idle',
-    error: null,
-    hasMore: true,
-    currentDetail: null,
-  },
+  name: "campers",
+  initialState,
   reducers: {
     clearCampers(state) {
       state.items = [];
+      state.total = 0;
       state.page = 1;
-      state.hasMore = true;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
+      // LIST
       .addCase(fetchCampers.pending, (state) => {
-        state.status = 'loading';
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchCampers.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        if (action.payload.page === 1) state.items = action.payload.data;
-        else state.items = state.items.concat(action.payload.data);
-        state.page = action.payload.page;
-        state.hasMore = action.payload.data.length >= state.limit;
+        state.loading = false;
+
+        const payload = action.payload || {};
+        const newItems = Array.isArray(payload.items) ? payload.items : [];
+
+        // Sayfalama: eskilere ekle
+        state.items = [...state.items, ...newItems];
+        state.total =
+          typeof payload.total === "number"
+            ? payload.total
+            : state.items.length;
+        state.page = payload.page || 1;
       })
       .addCase(fetchCampers.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch campers";
       })
+
+      // DETAIL
       .addCase(fetchCamperById.pending, (state) => {
-        state.status = 'loading';
-        state.currentDetail = null;
+        state.loading = true;
+        state.error = null;
+        state.selectedCamper = null;
       })
       .addCase(fetchCamperById.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.currentDetail = action.payload;
+        state.loading = false;
+        state.selectedCamper = action.payload || null;
       })
       .addCase(fetchCamperById.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch camper";
       });
   },
 });

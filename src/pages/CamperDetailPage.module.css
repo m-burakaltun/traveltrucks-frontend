@@ -1,0 +1,36 @@
+/* src/pages/CamperDetailPage.module.css */
+.main {
+    max-width: 1100px;
+    margin: 20px auto 40px;
+    padding: 0 20px;
+  }
+  
+  .title {
+    font-size: 32px;
+    font-weight: 800;
+  }
+  
+  .meta {
+    color: #666;
+    margin-bottom: 16px;
+  }
+  
+  .info {
+    display: flex;
+    gap: 30px;
+    margin-top: 20px;
+  }
+  
+  .description {
+    flex: 2;
+  }
+  
+  .description ul {
+    list-style: disc;
+    padding-left: 20px;
+  }
+  
+  .side {
+    flex: 1;
+  }
+  

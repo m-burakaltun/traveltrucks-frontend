@@ -1,11 +1,14 @@
-import React from 'react';
+// src/components/Gallery.jsx
+import React from "react";
+import styles from "./Gallery.module.css";
 
-export default function Gallery({ images }){
-  if (!images || images.length === 0) return <div>No images</div>;
+export default function Gallery({ images = [] }) {
+  if (!images.length) return null;
+
   return (
-    <div className="gallery" style={{marginBottom:12}}>
-      {images.map((src, i) => (
-        <img key={i} src={src} alt={`img-${i}`} />
+    <div className={styles.gallery}>
+      {images.map((src, idx) => (
+        <img key={idx} src={src} alt={`camper-${idx}`} />
       ))}
     </div>
   );
